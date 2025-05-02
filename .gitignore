@@ -1,0 +1,30 @@
+node_modules/
+.env
+build/
+dist/
+.DS_Store
+
+# === React クライアント用の無視設定 ===
+client/node_modules/
+client/.pnp
+client/.pnp.js
+
+# テスト関連
+client/coverage/
+
+# ビルド成果物
+client/build/
+
+# OSやIDE系
+client/.DS_Store
+
+# 環境変数
+client/.env.local
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
+
+# npm / yarn ログ
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
