@@ -3,10 +3,16 @@ const mongoose = require("mongoose");
 
 const app = express();
 const PORT = 3000;
+const cors = require("cors");
+
 require("dotenv").config();
+app.use(cors({
+    origin: "http://localhost:3001",
+    credentials: true
+}));
 
 app.use(express.json());
-app.use("/api/v1", require("./src/v1/routes/auth"));
+app.use("/api/v1/auth", require("./src/v1/routes/auth"));
 
 //DB接続
 try {
