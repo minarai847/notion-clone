@@ -56,9 +56,37 @@ const Register = () => {
       localStorage.setItem("token", res.token);
       console.log("新規登録に成功しました。");
     } catch (err) {
-      console.log(err);
+      console.log("全体のエラー:", err);
+      console.log("APIのレスポンス:", err?.response);
+      console.log("APIのエラーデータ:", err?.response?.data);
+      console.log("APIのバリデーションエラー:", err?.response?.data?.errors);
+
+      const errors = err?.response?.data?.errors;
+
+      if (Array.isArray(errors)) {
+        errors.forEach((error) => {
+          // param ではなく "field" が使われている
+          switch (error?.field) {
+            case "username":
+              setUsernameErrText(error.msg);
+              break;
+            case "password":
+              setPasswordErrText(error.msg);
+              break;
+            case "confirmPassword":
+              setconfirmErrText(error.msg);
+              break;
+            default:
+              break;
+          }
+        });
+      } else {
+        setError("予期しないエラーが発生しました。");
+      }
     }
-  }
+
+
+  };
   return (
     <>
       <Box component="form" onSubmit={handlesubmit} noValidate>
