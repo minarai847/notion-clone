@@ -15,13 +15,15 @@ app.use(express.json());
 app.use("/api/v1/auth", require("./src/v1/routes/auth"));
 
 //DB接続
-try {
-    mongoose.connect(process.env.MONGODB_URL);
-    console.log("DBと接続中")
-} catch (errors) {
-    console.log(errors);
-}
+mongoose.connect(process.env.MONGODB_URL)
+    .then(() => {
+        console.log("DBと接続中");
+    })
+    .catch((errors) => {
+        console.log("MongoDB接続エラー:", errors.message);
+        console.log("サーバーはMongoDBなしで起動します");
+    });
 
 app.listen(PORT, () => {
-    console.log("ローカルサーバー起動中");
+    console.log(`ローカルサーバー起動中: http://localhost:${PORT}`);
 });
