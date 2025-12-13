@@ -56,10 +56,8 @@ const Register = () => {
       localStorage.setItem("token", res.token);
       console.log("新規登録に成功しました。");
     } catch (err) {
-      console.log("全体のエラー:", err);
-      console.log("APIのレスポンス:", err?.response);
-      console.log("APIのエラーデータ:", err?.response?.data);
-      console.log("APIのバリデーションエラー:", err?.response?.data?.errors);
+      console.log(err);
+
 
       const errors = err?.response?.data?.errors;
 
