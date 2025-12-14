@@ -79,7 +79,8 @@ const Register = () => {
       setLoading(false);
       console.log(err);
 
-      const errors = err?.response?.data?.errors;
+      // axiosClientでerr.responseをthrowしているので、err.dataにアクセス
+      const errors = err?.data?.errors;
 
       if (Array.isArray(errors)) {
         errors.forEach((error) => {

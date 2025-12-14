@@ -52,16 +52,17 @@ const Login = () => {
     setLoading(true);
     //新規登録APIを叩く
     try {
-      const res = await authApi.register({ username, password });
+      const res = await authApi.login({ username, password });
       setLoading(false);
       localStorage.setItem("token", res.token);
-      console.log("新規登録に成功しました。");
+      console.log("ログインに成功しました");
       navigate("/");
     } catch (err) {
       setLoading(false);
       console.log(err);
 
-      const errors = err?.response?.data?.errors;
+      // axiosClientでerr.responseをthrowしているので、err.dataにアクセス
+      const errors = err?.data?.errors;
 
       if (Array.isArray(errors)) {
         errors.forEach((error) => {
