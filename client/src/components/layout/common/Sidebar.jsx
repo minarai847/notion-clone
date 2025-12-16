@@ -4,15 +4,26 @@ import { List, ListItem, Box, Typography, ListItemButton } from '@mui/material';
 import LogtoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import IconButton from '@mui/material/IconButton';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import assets from '../../../assets';
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from "react-redux";
+import { Link } from 'react-router-dom';
 
 function Sidebar() {
+    const navigate = useNavigate();
+    const user = useSelector((state) => state.user.value);
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        navigate("/login");
+    }
     return (
         <Drawer container={window.document.body} variant="permanent" open={true} sx={{ width: 250, height: "100vh" }}>
-            <List sx={{ width: 250, hiegth: "100vh" }}>
+            <List sx={{ width: 250, hiegth: "100vh", backgroundColor: assets.colors.secondary }}>
                 <ListItemButton>
                     <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <Typography varian="body2" fontWeight="700">Notionクローン開発</Typography>
-                        <IconButton>
+                        <Typography varian="body2" fontWeight="700">{user.username}</Typography>
+                        <IconButton onClick={logout}>
                             <LogtoutOutlinedIcon />
                         </IconButton>
                     </Box>
@@ -35,8 +46,11 @@ function Sidebar() {
                         </IconButton>
                     </Box>
                 </ListItemButton>
+                <ListItemButton sx={{ pl: "20px" }} component={Link} to="/memo">
+                    <Typography>無題</Typography>
+                </ListItemButton>
             </List>
-        </Drawer>
+        </Drawer >
     )
 }
 
