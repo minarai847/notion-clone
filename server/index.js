@@ -12,7 +12,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use("/api/v1/auth", require("./src/v1/routes/auth"));
+app.use("/api/v1", require("./src/v1/routes"));
 
 //DB接続
 mongoose.connect(process.env.MONGODB_URL)
