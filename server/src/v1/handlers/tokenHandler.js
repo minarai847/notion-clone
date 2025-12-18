@@ -25,23 +25,32 @@ const tokenDecode = (req) => {
 
 // JWT認証を検証するためのミドルウェア（バリデーションチェック）
 const verifyToken = async (req, res, next) => {
+    console.log("verifyToken: 認証チェック開始");
+    console.log("verifyToken: Authorization =", req.headers["authorization"]);
+
     const tokenDecoded = tokenDecode(req);
+    console.log("verifyToken: tokenDecoded =", tokenDecoded);
 
     if (tokenDecoded) {
         try {
             // JWTと一致するユーザーを探す
             const user = await User.findById(tokenDecoded.id);
+            console.log("verifyToken: user =", user ? "見つかりました" : "見つかりませんでした");
+
             if (!user) {
+                console.log("verifyToken: ユーザーが見つかりません");
                 return res.status(401).json({ message: "権限がありません" });
             }
 
             req.user = user;
+            console.log("verifyToken: 認証成功、next()を呼び出します");
             next();
         } catch (error) {
-            console.error("Error in verifyToken middleware:", error.message);
+            console.error("verifyToken: エラー", error.message);
             return res.status(500).json({ message: "サーバーエラー" });
         }
     } else {
+        console.log("verifyToken: トークンのデコードに失敗");
         return res.status(401).json({ message: "権限がありません" });
     }
 };

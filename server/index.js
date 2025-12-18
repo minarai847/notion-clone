@@ -12,7 +12,18 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use("/api/v1", require("./src/v1/routes"));
+
+// リクエストログミドルウェア
+app.use((req, res, next) => {
+    console.log(`[${req.method}] ${req.url}`);
+    next();
+});
+
+// ルーティングのデバッグログ
+console.log("ルーティングを読み込み中...");
+const routes = require("./src/v1/routes");
+console.log("ルーティングを読み込みました:", typeof routes);
+app.use("/api/v1", routes);
 
 //DB接続
 mongoose.connect(process.env.MONGODB_URL)

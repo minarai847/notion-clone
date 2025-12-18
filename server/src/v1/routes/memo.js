@@ -1,11 +1,13 @@
 const router = require("express").Router();
-const { body, validationResult } = require("express-validator");
-
-require("dotenv").config();
 
 const memoController = require("../controllers/memo");
 const tokenHandler = require("../handlers/tokenHandler");
 
+console.log("memo.js: ルーティング設定中");
+console.log("memo.js: memoController.create =", typeof memoController.create);
 
+router.post("/", tokenHandler.verifyToken, memoController.create);
+
+console.log("memo.js: ルーティング設定完了");
 
 module.exports = router;
