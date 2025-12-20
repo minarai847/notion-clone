@@ -8,6 +8,8 @@ import assets from '../../../assets';
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
+import memoApi from '../../../api/memoApi';
+import { useEffect } from 'react';
 
 function Sidebar() {
     const navigate = useNavigate();
@@ -17,6 +19,18 @@ function Sidebar() {
         localStorage.removeItem("token");
         navigate("/login");
     }
+
+    useEffect(() => {
+        const getMemos = async () => {
+            try {
+                const res = await memoApi.getAll();
+                console.log("getMemos: レスポンス", res);
+            } catch (err) {
+                console.error("getMemos: エラー", err);
+            }
+        };
+        getMemos();
+    }, []);
     return (
         <Drawer container={window.document.body} variant="permanent" open={true} sx={{ width: 250, height: "100vh" }}>
             <List sx={{ width: 250, hiegth: "100vh", backgroundColor: assets.colors.secondary }}>
