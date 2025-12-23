@@ -5,19 +5,21 @@ import LogtoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import IconButton from '@mui/material/IconButton';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import assets from '../../../assets';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import memoApi from '../../../api/memoApi';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { setMemo } from '../../../redux/featuers/memoSlice';
+
 
 function Sidebar() {
     const dispatch = useDispatch();
+    const [activeIndex, setActiveIndex] = useState(0);
     const navigate = useNavigate();
     const user = useSelector((state) => state.user.value);
     const memos = useSelector((state) => state.memo.value);
-
+    const { memoId } = useParams();
     const logout = () => {
         localStorage.removeItem("token");
         navigate("/login");
@@ -28,13 +30,18 @@ function Sidebar() {
             try {
                 const res = await memoApi.getAll();
                 dispatch(setMemo(res));
-                console.log("getMemos: レスポンス", res);
             } catch (err) {
                 console.error("getMemos: エラー", err);
             }
         };
         getMemos();
-    }, []);
+    }, [dispatch]);
+
+    useEffect(() => {
+        const activeIndex = memos.findIndex((e) => e._id === memoId);
+        setActiveIndex(activeIndex);
+
+    }, [navigate]);
     return (
         <Drawer container={window.document.body} variant="permanent" open={true} sx={{ width: 250, height: "100vh" }}>
             <List sx={{ width: 250, hiegth: "100vh", backgroundColor: assets.colors.secondary }}>
@@ -65,7 +72,7 @@ function Sidebar() {
                     </Box>
                 </ListItemButton>
                 {memos.map((item, index) => (
-                    <ListItemButton sx={{ pl: "20px" }} component={Link} to={`/memo/${item._id}`}>
+                    <ListItemButton sx={{ pl: "20px" }} component={Link} to={`/memo/${item._id}`} key={item._id} selected={index === activeIndex}>
                         <Typography>{item.title}</Typography>
                     </ListItemButton>
                 )
