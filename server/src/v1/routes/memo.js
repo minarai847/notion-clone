@@ -10,6 +10,7 @@ router.post("/", tokenHandler.verifyToken, memoController.create);
 router.get("/", tokenHandler.verifyToken, memoController.getAll);
 
 router.get("/:memoId", tokenHandler.verifyToken, memoController.getOne);
+router.put("/:memoId", tokenHandler.verifyToken, memoController.update);
 console.log("memo.js: ルーティング設定完了");
 
 module.exports = router;

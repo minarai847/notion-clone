@@ -42,3 +42,20 @@ exports.getOne = async (req, res) => {
         return res.status(500).json(err);
     }
 };
+exports.update = async (req, res) => {
+    const { memoId } = req.params;
+    const { title, description } = req.body;
+    try {
+        if (title === "") req.body.title = "無題";
+        if (description === "") req.body.description = "ここに自由に記入してください";
+        const memo = await Memo.findOne({ user: req.user._id, _id: memoId });
+        if (!memo) return res.status(404).json({ message: "メモが見つかりません" });
+        const updatedMemo = await Memo.findByIdAndUpdate(memoId, {
+            $set: req.body,
+        })
+        return res.status(200).json(updatedMemo);
+    } catch (err) {
+        console.error("memo.getOne: エラー", err);
+        return res.status(500).json(err);
+    }
+};
